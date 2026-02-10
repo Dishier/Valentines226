@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Propuesta de San Valentín</title>
+    <style>
+        /* Estilos similares a la configuración de Tkinter */
+        body {
+            background-color: #FFE4E1; /* Light pink background */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            overflow: hidden;
+        }
+
+        h1 {
+            color: #FF69B4; /* Darker pink for text */
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .buttons {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        /* Estilo del botón SÍ */
+        #yesBtn {
+            background-color: #98FB98; /* Light green */
+            color: white;
+            border: 4px ridge #ffffff;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: all 0.2s;
+        }
+
+        /* Estilo del botón NO */
+        #noBtn {
+            background-color: #FF6B6B; /* Light red */
+            color: white;
+            border: 4px ridge #ffffff;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 10px;
+        }
+
+        /* Contenedor para el girasol (Canvas) */
+        #sunflowerCanvas {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: black; /* Background black */
+        }
+    </style>
+</head>
+<body>
+
+    <div id="main-content">
+        <h1>¿Puedo ser tu San Valentín?</h1>
+        <div class="buttons">
+            <button id="yesBtn">SÍ</button>
+            <button id="noBtn">NO</button>
+        </div>
+    </div>
+
+    <canvas id="sunflowerCanvas"></canvas>
+
+    <script>
+        const yesBtn = document.getElementById('yesBtn');
+        const noBtn = document.getElementById('noBtn');
+        const mainContent = document.getElementById('main-content');
+        const canvas = document.getElementById('sunflowerCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let yesSize = 14;
+
+        // Lógica del botón NO: aumenta el tamaño del botón SÍ
+        noBtn.addEventListener('click', () => {
+            yesSize *= 1.5;
+            yesBtn.style.fontSize = yesSize + 'px';
+            yesBtn.style.padding = (yesSize * 0.7) + 'px ' + (yesSize * 1.4) + 'px';
+        });
+
+        // Lógica del botón SÍ
+        yesBtn.addEventListener('click', () => {
+            alert("¡Síii!, mi calabacita preciosa c:\n\nMe acabas de hacer el hombre más feliz! ❤️\n\nAhora una sorpresa para ti 🌻");
+            
+            mainContent.style.display = 'none';
+            canvas.style.display = 'block';
+            setupCanvas();
+            drawSunflower();
+        });
+
+        function setupCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        // Simulación de la animación de sunflower.py usando Canvas
+        async function drawSunflower() {
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2 - 40;
+
+            // Dibujar pétalos (simplificado del bucle de turtle)
+            ctx.strokeStyle = '#FFA216';
+            ctx.lineWidth = 2;
+            for (let i = 0; i < 16; i++) {
+                ctx.save();
+                ctx.translate(centerX, centerY);
+                ctx.rotate((i * 22.5) * Math.PI / 180);
+                
+                ctx.beginPath();
+                ctx.ellipse(0, -80, 20, 60, 0, 0, 2 * Math.PI);
+                ctx.stroke();
+                ctx.restore();
+                await new Promise(r => setTimeout(r, 50));
+            }
+
+            // Dibujar centro (semillas de girasol con ángulo áureo)
+            const phi = 137.508 * (Math.PI / 180);
+            for (let i = 0; i < 140; i++) {
+                const r = 4 * Math.sqrt(i);
+                const theta = i * phi;
+                const x = centerX + r * Math.cos(theta);
+                const y = centerY + r * Math.sin(theta);
+
+                ctx.fillStyle = '#8B4513';
+                ctx.beginPath();
+                ctx.arc(x, y, 3, 0, 2 * Math.PI);
+                ctx.fill();
+                if (i % 5 === 0) await new Promise(r => setTimeout(r, 10));
+            }
+
+            // Dibujar "TÚ"
+            ctx.fillStyle = '#FFA216';
+            ctx.font = 'bold 40px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('TÚ', centerX, centerY + 150);
+        }
+    </script>
+</body>
+</html>
